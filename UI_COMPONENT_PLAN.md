@@ -1,3 +1,8 @@
-# Heap Connector - UI_COMPONENT_PLAN.md
+# Heap Analytics Connector — UI Component Plan
 
-Standard documentation for Heap Connector in Imperal Cloud.
+**Compliance:** UI_INTERFACE_STANDARD.md
+
+## Интерфейс
+- **Левый сайдбар:** Форма подключения на всю ширину контейнера, все инпуты с лейблами и контекстными плейсхолдерами.
+- **Центральная зона:** Карточки статуса подключения, таблица сущностей (определения событий (/event_definitions)), журнал операций.
+- **Модальные окна:** Предупреждения и подтверждения для любых деструктивных или модифицирующих действий.
