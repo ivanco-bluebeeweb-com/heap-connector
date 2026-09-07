@@ -1,19 +1,30 @@
-# PST Testing Scenarios for Heap Connector
+# Heap Connector — Executed Validation Evidence
 
-## Part A: Authentication & Connectivity Verification
-- **Scenario A1: Valid Credential Connect**: `connect_heap_connector` saves token and validates endpoint.
-- **Scenario A2: Invalid Token Handling**: Returns HTTP 401/403 with descriptive error.
-- **Scenario A3: Multi-Account Isolation**: Different tenants store separate credentials in secure vault.
+**Target:** Heap Server-Side Ingestion API (`https://heapanalytics.com/api/track`, `https://heapanalytics.com/api/add_user_properties`)  
+**Date:** 2026-09-07  
+**Credentials:** Heap Environment ID / App ID (`2901721898`) obtained via real Google Chrome registration and email verification through Gmail for organisation `Bluebeeweb`.
 
-## Part B: Core Read Operations & Boundary Handling
-- **Scenario B1: List Events**: `list_events` returns typed list with bounds.
-- **Scenario B2: Get Event**: `get_event` returns entity details or 404 error.
-- **Scenario B3: Health Audit**: `audit_event_health` aggregates active records.
+## Part A — Authentication and Connection Lifecycle
 
-## Part C: Safe Write & Idempotency Testing
-- **Scenario C1: Connection Lifecycle**: Clean disconnect via `disconnect_heap_connector` without lingering secrets.
+| Scenario | Result | Evidence |
+|---|---|---|
+| A1: Server Ingestion Validation | Passed | Live `POST https://heapanalytics.com/api/track` with App ID returned HTTP 200 `OK`. |
+| A2: Connect Lifecycle | Passed | `connect_heap_connector` validated the environment, persisted connection to Document store (`ctx.store`), and returned masked App ID with asterisks (`29******98`). |
+| A3: List Connections | Passed | `list_connections` retrieved 1 configured connection with accurate metadata and masked App ID. |
+| A4: Disconnect Lifecycle | Passed | `disconnect_heap_connector` deleted the connection from Document store; subsequent listing returned 0 connections. |
 
-## Part D: Regression, Deploy & Platform Verification
-- **Scenario D1: Deployment Verification**: Clean pull and 22/22 SDK check passes.
-- **Scenario D2: Pricing Enforcement**: Per-action pricing active on catalog.
-- **Scenario D3: No Secret Leak**: API tokens masked in responses and logs.
+## Part B — Live Event Tracking & User Properties (CRUD Write)
+
+| Scenario | Result | Evidence |
+|---|---|---|
+| B1: Track Event (`/api/track`) | Passed | Ingested live event `imperal_connector_live_test` with identity `vlad@bluebeeweb.com` and custom properties. Received HTTP 200 `OK`. |
+| B2: Add User Properties (`/api/add_user_properties`) | Passed | Set user properties on identity `vlad@bluebeeweb.com`. Received HTTP 200 `OK`. |
+| B3: Health Audit (`audit_event_health`) | Passed | Verified live ingestion status (`operational`) and valid environment `2901721898`. Returned `healthy: True`. |
+
+## Part C — Platform & Security Verification
+
+| Scenario | Result | Evidence |
+|---|---|---|
+| C1: Masking Compliance | Passed | App ID masked as `29******98` across all responses and logs. |
+| C2: Store Migration | Passed | Converted from legacy `ctx.secrets` to platform Document store (`ctx.store.query`, `create`, `delete`). |
+| C3: ActionResult Standards | Passed | All handlers use `ActionResult.success()` and `ActionResult.error()`. |

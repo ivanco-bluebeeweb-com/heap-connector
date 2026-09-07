@@ -9,8 +9,8 @@ class NoParams(BaseModel):
 
 class ConnectParams(BaseModel):
     label: str = Field(default="", description="Friendly connection label, e.g. Primary Heap.")
-    api_key: str = Field(description="API Key / Project Token")
-    base_url: str = Field(default="https://heapanalytics.com/api", description="Heap API base URL.")
+    app_id: str = Field(description="Heap Environment / App ID (e.g. 2901721898).")
+    base_url: str = Field(default="https://heapanalytics.com", description="Heap API base URL.")
 
 class ConnectionIdParams(BaseModel):
     connection_id: str = Field(default="", description="Connection identifier (empty uses active connection).")
@@ -18,7 +18,7 @@ class ConnectionIdParams(BaseModel):
 class ConnectionRecord(BaseModel):
     id: str
     label: str
-    masked_key: str
+    masked_app_id: str
     base_url: str
     is_active: bool
 
@@ -47,10 +47,10 @@ class ListEventParams(BaseModel):
 
 class GetEventParams(BaseModel):
     connection_id: str = Field(default="", description="Optional connection ID.")
-    event_id: str = Field(description="Heap Event ID.")
+    event_id: str = Field(description="Heap Event Name or ID.")
 
 class AuditHealthReport(BaseModel):
     healthy: bool
     total_events: int
-    details: Dict[str, Any] = Field(default_factory=dict)
+    details: Dict[str, Any]
     summary: str
