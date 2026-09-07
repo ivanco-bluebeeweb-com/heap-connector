@@ -10,7 +10,7 @@ from schemas import (
 from handlers_connection import resolve_client
 
 @chat.function("list_events", "List events in Heap.", action_type="read", chain_callable=True, event="heap-connector.list_events", effects=["read:events"], data_model=EventList)
-async def list_events(params: ListEventParams, ctx) -> ActionResult:
+async def list_events(ctx, params: ListEventParams) -> ActionResult:
     client = await resolve_client(ctx, params.connection_id)
     try:
         raw_items = await client.list_events(limit=params.limit)
@@ -30,7 +30,7 @@ async def list_events(params: ListEventParams, ctx) -> ActionResult:
         return ActionResult.error(f"Error listing events: {e}")
 
 @chat.function("get_event", "Get details of one Event in Heap.", action_type="read", chain_callable=True, event="heap-connector.get_event", effects=["read:event"], data_model=EventRecord)
-async def get_event(params: GetEventParams, ctx) -> ActionResult:
+async def get_event(ctx, params: GetEventParams) -> ActionResult:
     client = await resolve_client(ctx, params.connection_id)
     try:
         r = await client.get_event(params.event_id)
@@ -47,7 +47,7 @@ async def get_event(params: GetEventParams, ctx) -> ActionResult:
         return ActionResult.error(f"Error getting event: {e}")
 
 @chat.function("audit_event_health", "Audit health of Heap events and connectivity.", action_type="read", chain_callable=True, event="heap-connector.audit_event_health", effects=["read:audit"], data_model=AuditHealthReport)
-async def audit_event_health(params: ConnectionIdParams, ctx) -> ActionResult:
+async def audit_event_health(ctx, params: ConnectionIdParams) -> ActionResult:
     client = await resolve_client(ctx, params.connection_id)
     try:
         auth_res = await client.verify_auth()

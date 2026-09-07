@@ -45,7 +45,7 @@ async def resolve_client(ctx, connection_id: str = "") -> HeapClient:
     )
 
 @chat.function("connect_heap_connector", "Connect Heap account via credentials.", action_type="write", chain_callable=True, event="heap-connector.connect_heap_connector", effects=["create:connection"], data_model=ConnectionRecord)
-async def connect_heap_connector(params: ConnectParams, ctx) -> ActionResult:
+async def connect_heap_connector(ctx, params: ConnectParams) -> ActionResult:
     client = HeapClient(app_id=params.app_id, base_url=params.base_url)
     res = await client.verify_auth()
     if res.get("status") == "error":
@@ -75,7 +75,7 @@ async def connect_heap_connector(params: ConnectParams, ctx) -> ActionResult:
     )
 
 @chat.function("list_connections", "List configured Heap connections.", action_type="read", chain_callable=True, event="heap-connector.list_connections", effects=["read:connections"], data_model=ConnectionList)
-async def list_connections(params: NoParams, ctx) -> ActionResult:
+async def list_connections(ctx, params: NoParams) -> ActionResult:
     conns = await get_connections_list(ctx)
     records = []
     for c in conns:
@@ -89,7 +89,7 @@ async def list_connections(params: NoParams, ctx) -> ActionResult:
     return ActionResult.success({"connections": records, "total": len(records)}, summary=f"Found {len(records)} connection(s).")
 
 @chat.function("disconnect_heap_connector", "Disconnect Heap account and delete stored credentials.", action_type="destructive", chain_callable=True, event="heap-connector.disconnect_heap_connector", effects=["delete:connection"], data_model=DeleteResult)
-async def disconnect_heap_connector(params: ConnectionIdParams, ctx) -> ActionResult:
+async def disconnect_heap_connector(ctx, params: ConnectionIdParams) -> ActionResult:
     conns = await get_connections_list(ctx)
     if not conns:
         return ActionResult.error("No active Heap connection to disconnect.")
