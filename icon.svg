@@ -1,11 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <defs>
-    <linearGradient id="convertk-bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#2563EB"/>
-      <stop offset="1" stop-color="#1D4ED8"/>
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="14" fill="url(#convertk-bg)"/>
-  <circle cx="32" cy="32" r="16" fill="white" opacity="0.9"/>
-  <text x="32" y="38" font-size="18" font-family="sans-serif" font-weight="bold" text-anchor="middle" fill="#1D4ED8">CO</text>
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M45.1637 36.7485H34V91.2514H45.1637V36.7485ZM69.2953 15.9998H58.1692V57.5347H69.2953V15.9998Z" fill="black"/>
+<path d="M69.2951 70.4646H58.1689V112H69.2951V70.4646ZM93.4267 36.7479H82.3006V91.2509H93.4267V36.7479Z" fill="#31D891"/>
 </svg>
